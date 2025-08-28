@@ -13,5 +13,4 @@ while True:
     
     match opcion:
         case "1":
-            print("---sub menu---")
-    
+            print("---sub menu---") 
