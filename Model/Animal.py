@@ -1,55 +1,55 @@
 class Animal():
     def __init__(self, edad:str, nombreDueño: str, nombreAnimal: str, genero: str):
-        self.edad = edad
-        self.nombreDueño = nombreDueño
-        self.genero = genero
-        self.nombreAnimal = nombreAnimal
+        self.__edad = edad
+        self.__nombreDueño = nombreDueño
+        self.__genero = genero
+        self.__nombreAnimal = nombreAnimal
         
     def getnombreAnimal(self) -> str:
-        print("Nombre Animal:", self.nombreAnimal)
+        return self.__nombreAnimal
         
     def getnombreDueño(self) -> str:
-        print("Nombre Dueño:", self.nombreDueño)
+        return "Nombre Dueño:", self.__nombreDueño
         
     def getedadAnimal(self) -> str:
-        print("Edad:", self.edad)
+        return "Edad:", self.__edad
         
     def getgeneroAnimal(self) -> str:
-        print("Nombre Animal:", self.genero)
+        return "Nombre Animal:", self.__genero
 
 class Perro(Animal):
     def __init__(self, edad: str, nombreDueño: str, nombreAnimal: str, genero: str, razaP: str):
         super().__init__(edad, nombreDueño, nombreAnimal, genero)
-        self.razaP = razaP
+        self.__razaP = razaP
 
     def getRaza(self) -> str:
-        print("Raza Perro:", self.razaP)
+        print("Raza Perro:", self.__razaP)
 
     def setRaza(self, raza: str) -> None:
-        self.razaP = raza
+        self.__razaP = raza
 
 
 class Gato(Animal):
     def __init__(self, edad: str, nombreDueño: str, nombreAnimal: str, genero: str, razaG: str):
         super().__init__(edad, nombreDueño, nombreAnimal, genero)
-        self.razaG = razaG
+        self.__razaG = razaG
 
     def getRaza(self) -> str:
-        print("Raza Gato:", self.razaG)
+        print("Raza Gato:", self.__razaG)
 
     def setRaza(self, raza: str) -> None:
-        self.razaG = raza
+        self.__razaG = raza
 
 class Ave(Animal):
     def __init__(self, edad: str, nombreDueño: str, nombreAnimal: str, genero: str, tipo: str):
         super().__init__(edad, nombreDueño, nombreAnimal, genero)
-        self.tipo = tipo
+        self.__tipo = tipo
 
     def getRaza(self) -> str:  
-        print("Tipo de Ave:", self.tipo)
+        print("Tipo de Ave:", self.__tipo)
 
     def setRaza(self, tipo: str) -> None:
-        self.tipo = tipo
+        self.__tipo = tipo
 
 #Ejemplo salida
 perro1 = Perro("5", "Carlos", "Firulais", "M", "Labrador")
