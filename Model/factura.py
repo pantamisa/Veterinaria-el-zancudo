@@ -1,4 +1,3 @@
-
 from Manejo_animales import ManejoAnimales
 
 class Factura:
