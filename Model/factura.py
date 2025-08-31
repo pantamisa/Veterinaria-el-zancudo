@@ -1,6 +1,8 @@
 from Manejo_animales import ManejoAnimales
+
 class Factura:
     def __init__(self, manejador_animales : ManejoAnimales):
+
         self.facturacion = {}  # Diccionario para almacenar servicios y costos por animal
         self.manejador = manejador_animales  #de manejo animales
 
@@ -29,6 +31,7 @@ class Factura:
 
         print("\n📄 Factura de " + nombreAnimal + ":")
         for servicio, costo in self.facturacion[nombreAnimal]:
+
             print(f"- {servicio}: ${costo}")   
         print(f"➡ Total: ${total}\n")         
         return total
