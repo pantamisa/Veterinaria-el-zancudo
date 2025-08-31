@@ -1,4 +1,5 @@
 from Manejo_animales import ManejoAnimales
+
 class Factura:
     def __init__(self, manejador_animales : ManejoAnimales):
         self.facturacion = {}  # Diccionario para almacenar servicios y costos por animal
@@ -8,6 +9,7 @@ class Factura:
         animal = self.manejador.BuscarAnimal(nombreAnimal)
         if not animal:
             print(f"El animal '{nombreAnimal}' no está registrado en el sistema.")
+
             return
         
         if nombreAnimal not in self.facturacion:
