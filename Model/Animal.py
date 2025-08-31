@@ -18,8 +18,6 @@ class Animal():
         return "Nombre Animal:", self.__genero
 
 
-
-
 class Perro(Animal):
     def __init__(self, edad: str, nombreDueño: str, nombreAnimal: str, genero: str, razaP: str):
         super().__init__(edad, nombreDueño, nombreAnimal, genero)
@@ -30,7 +28,6 @@ class Perro(Animal):
 
     def setRaza(self, raza: str) -> None:
         self.__razaP = raza
-
 
 
 
@@ -46,7 +43,6 @@ class Gato(Animal):
         self.__razaG = raza
 
 
-
 class Ave(Animal):
     def __init__(self, edad: str, nombreDueño: str, nombreAnimal: str, genero: str, tipo: str):
         super().__init__(edad, nombreDueño, nombreAnimal, genero)
@@ -57,7 +53,6 @@ class Ave(Animal):
 
     def setRaza(self, tipo: str) -> None:
         self.__tipo = tipo
-
 
 
 #Ejemplo salida

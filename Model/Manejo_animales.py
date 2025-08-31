@@ -6,12 +6,12 @@ class ManejoAnimales:
     def CrearAnimal(self, animal):
         """Agrega un animal a la lista"""
         self.animales.append(animal)
-        print(f"Animal {animal.Getnombre()} agregado con éxito.")
+        print(f"Animal {animal.getnombreAnimal()} agregado con éxito.")
 
     def BorrarAnimal(self, nombre):
         """Elimina un animal por su nombre"""
         for a in self.animales:
-            if a.Getnombre() == nombre:
+            if a.getnombreAnimal() == nombre:
                 self.animales.remove(a)
                 print(f"Animal {nombre} eliminado con éxito.")
                 return True
@@ -21,8 +21,10 @@ class ManejoAnimales:
     def BuscarAnimal(self, nombre):
         """Busca un animal por su nombre y lo retorna"""
         for a in self.animales:
-            if a.Getnombre() == nombre:
+            if a.getnombreAnimal()== nombre:
+                print("animal encontrado")
                 return a
+        print("animal NO encontrado")
         return None
 
     def AñadirVacuna(self, nombre, vacuna):
