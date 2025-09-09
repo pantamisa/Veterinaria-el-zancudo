@@ -1,5 +1,5 @@
 """
-Entidad Usuario
+Entidad Animal
 ===============
 
 Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
@@ -10,10 +10,11 @@ from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
+from uuid import UUID
 
 from ..Database.database import Base
 
-class Usuario(Base):
+class Animal(Base):
     """
     Modelo de Usuario que representa la tabla 'usuarios'
     
@@ -27,20 +28,22 @@ class Usuario(Base):
         fecha_actualizacion: Fecha y hora de última actualización
     """
     
-    __tablename__ = 'usuarios'
+    __tablename__ = 'Animal'
     
-    id_Usuario = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String(100), nullable=False)
-    apellido = Column(String(100), nullable=False)
-    email = Column(String(120), unique=True, nullable=False, index=True)
-    telefono = Column(String(20), nullable=True)
-    activo = Column(Boolean, default=True, nullable=False)
+    id_animal = Column(UUID, primary_key=True, autoincrement=True)
+    nombre_animal = Column(String(100), nullable=False)
+    Edad = Column(String(5), nullable=True)
+
+    id_usuario_crar=Column(UUID, ForeignKey('id_Usuario'), nullable=False)
+    id_usuario_Editar=Column(UUID, ForeignKey('id_Usuario'), nullable=False)
     fecha_registro = Column(DateTime, default=datetime.now, nullable=False)
     fecha_actualizacion = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     
     # Relaciones
-    usuarios = relationship("Usuario", back_populates="Animal", cascade="all, delete-orphan") 
-    
+    usuarios = relationship("Usuario", back_populates="Animal", cascade="all, delete-orphan")
+    generos =relationship("Genero", back_populates="Animal", cascade="all, delete-orphan")
+
+
     def __repr__(self):
         """Representación en string del objeto Usuario"""
         return f"<Usuario(id={self.id}, nombre='{self.nombre}', email='{self.email}')>"
