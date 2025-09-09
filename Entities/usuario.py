@@ -37,6 +37,9 @@ class Usuario(Base):
     activo = Column(Boolean, default=True, nullable=False)
     fecha_registro = Column(DateTime, default=datetime.now, nullable=False)
     fecha_actualizacion = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+
+    
+
     
     # Relaciones
     productos = relationship("Producto", back_populates="usuario", cascade="all, delete-orphan")
