@@ -7,7 +7,17 @@ para las entidades del sistema.
 """
 
 from .usuario_crud import UsuarioCRUD
-from .categoria_crud import CategoriaCRUD
-from .producto_crud import ProductoCRUD
- 
-__all__ = ['UsuarioCRUD', 'CategoriaCRUD', 'ProductoCRUD']  #modificar
+from .animal_crud import AnimalCRUD
+from .genero_crud import GeneroCRUD
+from .raza_animal_crud import RazaAnimalCRUD
+from .tipo_animal_crud import TipoAnimalCRUD
+from .citas_crud import CitaCRUD
+
+__all__ = [
+    'UsuarioCRUD',
+    'AnimalCRUD',
+    'GeneroCRUD',
+    'RazaAnimalCRUD',
+    'TipoAnimalCRUD',
+    'CitaCRUD'
+]
