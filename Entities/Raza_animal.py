@@ -1,11 +1,4 @@
-"""
-Entidad Usuario
-===============
-
-Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
-"""
-
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
@@ -16,36 +9,33 @@ from uuid import UUID  #ponerselo a los id
 
 class Raza_animal(Base):
     """
-    Modelo de Usuario que representa la tabla 'usuarios'
+    Modelo de Raza_animal que representa la tabla 'Raza_animal'
     
     Atributos:
-        id: Identificador único del usuario
-        nombre: Nombre completo del usuario
-        email: Correo electrónico del usuario (único)
-        telefono: Número de teléfono del usuario
-        activo: Estado del usuario (activo/inactivo)
-        fecha_registro: Fecha y hora de registro
-        fecha_actualizacion: Fecha y hora de última actualización
+        id_raza: Identificador único de cada raza de animal
+        nombreRaza: Nombre de la raza del animal (único)
+        id_tipoAnimal: tipo de animal al que pertenece la raza (clave foranea)
     """
     
-    __tablename__ = 'usuarios'
+    __tablename__ = 'Raza_animal'
     
-    id_raza = Column(UUID, Integer, primary_key=True, autoincrement=True)
+    id_raza = Column(UUID, Integer, primary_key=True, autoincrement=True, nullable=False) #elegir uno de los dos UUID o Integer
     nombreRaza = Column(String(100), nullable=False)
-    Tipoanimal=3
+    id_tipoAnimal=Column(Integer, ForeignKey('Tipo_animal.id_tipoAnimal'), nullable=False, autoincrement=True)
 
 
     
     # Relaciones //aquí van las relaciones de cada tabla
-    productos = relationship("Producto", back_populates="usuario", cascade="all, delete-orphan")
-    
+    id_tipoAnimal = relationship("Tipo_animal", back_populates="razas")   
+
     def __repr__(self):
         """Representación en string del objeto Usuario"""
-        return f"<Raza(id={self.id}, nombreRaza='{self.nombre}', email='{self.email}')>"
+        return f"<id_raza(id={self.id_raza}, nombreRaza='{self.nombreRaza}', id_tipoAnimal='{self.id_tipoAnimal}')>"
     
     def to_dict(self):
         """Convierte el objeto a un diccionario"""
         return {
             'id_raza': self.id_raza,
-            'nombreRaza': self.nombre,
+            'nombreRaza': self.nombreRaza,
+            'id_tipoAnimal': self.id_tipoAnimal
         }
