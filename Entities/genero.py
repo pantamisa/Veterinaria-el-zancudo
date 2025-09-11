@@ -1,47 +1,49 @@
-"""
-Entidad Animal
-===============
-
-Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
-"""
-
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+# models/genero.py
+import uuid 
+from sqlalchemy import Column, String, DateTime
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, Field, validator
+from sqlalchemy.sql import func
 from datetime import datetime
-from typing import Optional, List
 
-from ..Database.database import Base
-from uuid import UUID
+from ..Database.database import Base  # Ajusta a tu ruta real
+
+
 class Genero(Base):
     """
-    Modelo de Usuario que representa la tabla 'usuarios'
-    
-    Atributos:
-        id: Identificador único del usuario
-        nombre: Nombre completo del usuario
-        email: Correo electrónico del usuario (único)
-        telefono: Número de teléfono del usuario
-        activo: Estado del usuario (activo/inactivo)
-        fecha_registro: Fecha y hora de registro
-        fecha_actualizacion: Fecha y hora de última actualización
+    Modelo de Genero que representa la tabla 'generos'
     """
-    
-    __tablename__ = 'Genero'
-    
-    id_generp = Column(UUID, primary_key=True, autoincrement=True)
-    nombre_genero = Column(String(10), nullable=False)
-    
-    # Relaciones
-    animal = relationship("Producto", back_populates="Animal", cascade="all, delete-orphan")
+    __tablename__ = 'generos'
+
+    id_genero = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    nombre_genero = Column(String(10), nullable=False, index=True)
+
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+    # Relación inversa para ver animales de este género
+    animales = relationship("Animal", back_populates="genero")
 
     def __repr__(self):
-        """Representación en string del objeto Usuario"""
-        return f"<Usuario(id={self.id}, nombre='{self.nombre}', email='{self.email}')>"
-    
-    def to_dict(self):
-        """Convierte el objeto a un diccionario"""
-        return {
-            'id_genero': self.id_generp,
-            'nombre_genero': self.nombre_genero,
-        }
+        return f"<Genero(id_genero={self.id_genero}, nombre_genero='{self.nombre_genero}')>"
+
+
+# ======== Esquemas Pydantic ========
+
+class GeneroBase(BaseModel):
+    nombre_genero: str = Field(..., min_length=1, max_length=10, description="Nombre del género")
+
+    @validator('nombre_genero')
+    def validar_nombre(cls, v):
+        if not v.strip():
+            raise ValueError('El nombre del género no puede estar vacío')
+        return v.strip()
+
+class GeneroCreate(GeneroBase):
+    pass
+
+class GeneroResponse(GeneroBase):
+    id_genero: uuid.UUID
+
+    class Config:
+        from_attributes = True
