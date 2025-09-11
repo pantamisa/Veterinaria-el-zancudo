@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, func
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
@@ -22,7 +22,10 @@ class Raza_animal(Base):
     id_raza = Column(UUID, Integer, primary_key=True, autoincrement=True, nullable=False) #elegir uno de los dos UUID o Integer
     nombreRaza = Column(String(100), nullable=False)
     id_tipoAnimal=Column(Integer, ForeignKey('Tipo_animal.id_tipoAnimal'), nullable=False, autoincrement=True)
-
+    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
+    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
     
     # Relaciones //aquí van las relaciones de cada tabla

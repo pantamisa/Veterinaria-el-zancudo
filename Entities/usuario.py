@@ -5,7 +5,7 @@ Entidad Usuario
 Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
 """
 
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, UUID, func
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
@@ -35,8 +35,10 @@ class Usuario(Base):
     email = Column(String(120), unique=True, nullable=False, index=True)
     telefono = Column(String(20), nullable=True)
     activo = Column(Boolean, default=True, nullable=False)
-    fecha_registro = Column(DateTime, default=datetime.now, nullable=False)
-    fecha_actualizacion = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
+    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
     
 
