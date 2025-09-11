@@ -44,7 +44,7 @@ class Usuario(Base):
 
     
     # Relaciones
-    productos = relationship("Producto", back_populates="usuario", cascade="all, delete-orphan")
+    usuarios = relationship("Usuario", back_populates="Animal", cascade="all, delete-orphan") 
     
     def __repr__(self):
         """Representación en string del objeto Usuario"""
