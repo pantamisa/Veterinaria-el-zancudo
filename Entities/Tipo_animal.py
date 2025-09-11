@@ -24,6 +24,8 @@ class Tipo_animal(Base):
 
     # Relación con Raza_animal
     razas = relationship("Raza_animal", back_populates="Tipo_animal", cascade="all, delete-orphan")
+    usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
         return f"<Tipo_animal(id_tipoAnimal={self.id_tipoAnimal}, nombre='{self.nombre}')>"

@@ -30,6 +30,8 @@ class Raza_animal(Base):
     
     # Relaciones //aquí van las relaciones de cada tabla
     id_tipoAnimal = relationship("Tipo_animal", back_populates="razas")   
+    usuario_crea = relationship("usuario", foreign_keys=[id_usuario_crea])
+    usuario_edita = relationship("usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
         """Representación en string del objeto Usuario"""
