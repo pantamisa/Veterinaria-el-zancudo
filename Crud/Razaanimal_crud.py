@@ -2,7 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from Entities.Raza_animal import Raza_animal
 
-class Razaanimal_crud:
+class RazaAnimalCRUD:
     def __init__(self, db: Session):
         self.db = db
 

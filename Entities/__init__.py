@@ -6,24 +6,24 @@ Este módulo contiene todas las entidades del sistema usando SQLAlchemy
 y sus esquemas de validación con Pydantic.
 """
 
-from .usuario import Usuario, UsuarioCreate, UsuarioUpdate, UsuarioResponse
-from .animal import Animal, AnimalCreate, AnimalUpdate, AnimalResponse
-from .genero import Genero, GeneroCreate, GeneroResponse
-from .Raza_animal import RazaAnimal, RazaAnimalCreate, RazaAnimalUpdate, RazaAnimalResponse
-from .Tipo_animal import TipoAnimal, TipoAnimalCreate, TipoAnimalUpdate, TipoAnimalResponse
-from .Citas import Cita, CitaCreate, CitaUpdate, CitaResponse
+from .usuario import Usuario
+from .animal import Animal
+from .genero import Genero
+from .Raza_animal import Raza_animal
+from .Tipo_animal import Tipo_animal
+from .Citas import Citas
 
 __all__ = [
     # Usuario
-    'Usuario', 'UsuarioCreate', 'UsuarioUpdate', 'UsuarioResponse',
+    'Usuario',
     # Animal
-    'Animal', 'AnimalCreate', 'AnimalUpdate', 'AnimalResponse',
+    'Animal',
     # Genero
-    'Genero', 'GeneroCreate', 'GeneroResponse',
+    'Genero',
     # Raza Animal
-    'RazaAnimal', 'RazaAnimalCreate', 'RazaAnimalUpdate', 'RazaAnimalResponse',
+    'Raza_animal',
     # Tipo Animal
-    'TipoAnimal', 'TipoAnimalCreate', 'TipoAnimalUpdate', 'TipoAnimalResponse',
+    'Tipo_animal',
     # Citas
-    'Cita', 'CitaCreate', 'CitaUpdate', 'CitaResponse',
+    'Citas',
 ]

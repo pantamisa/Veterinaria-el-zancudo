@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 
-from ..Database.database import Base
+from ..Database.config import Base
 from uuid import UUID  #ponerselo a los id
 
 class Raza_animal(Base):

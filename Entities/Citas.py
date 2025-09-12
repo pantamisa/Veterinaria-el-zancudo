@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 from uuid import UUID
-from ..Database.database import Base
+from ..Database.config import Base
 
 class Citas(Base):
     """
