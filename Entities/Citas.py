@@ -1,53 +1,53 @@
-"""
-Entidad citas
-===============
-
-Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
-"""
-
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional, List
-from uuid import UUID
+from typing import Optional
 from ..Database.config import Base
+from uuid import UUID
 
 class Citas(Base):
     """
-    Modelo de Usuario que representa la tabla 'usuarios'
+    Modelo de Citas que representa la tabla 'Citas'
     
     Atributos:
-        id_citas: Identificador único del usuario
-        id_Servicio: clave foranea
-        id_animal: clave forenea
+        id_citas: Identificador único de cada cita
+        id_servicio: Identificador del servicio solicitado (clave foránea)
+        id_animal: Identificador del animal al que pertenece la cita (clave foránea)
+        fecha_asignacion: Fecha en que se asignó la cita
+        fecha_atencion: Fecha en que se atenderá la cita
     """
     
-    __tablename__ = 'Citas'
+    __tablename__ = "Citas"
     
-    id_Citas = Column(Integer, primary_key=True, autoincrement=True)
-  
-    fecha_creacion = Column(DateTime, default=datetime.now, nullable=False)
-    fecha_atencion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    fecha_edicion = Column(DateTime, default=datetime.now, onupdate=datetime.now)
-    
+    id_citas = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    id_servicio = Column(UUID(as_uuid=True), ForeignKey("Servicios.id_servicio"), nullable=False)
+    id_animal = Column(UUID(as_uuid=True), ForeignKey("Animal.id_animal"), nullable=False)
+    fecha_asignacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_atencion = Column(DateTime(timezone=True), nullable=True)
+
+    # Auditoría
+    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
+    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+
     # Relaciones
-    productos = relationship("Producto", back_populates="usuario", cascade="all, delete-orphan")
-    Servicios  = relationship("Servicio", back_populates="productos", cascade="all, delete-orphan")
-    Animal = relationship("Animal", back_populates="productos", cascade="all, delete-orphan")
-    
-
-
+    servicio = relationship("Servicios", back_populates="citas")
+    animal = relationship("Animal", back_populates="citas")
+    usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
-        """Representación en string del objeto Usuario"""
-        return f"<Citas(id={self.id_Citas}')>"
+        """Representación en string del objeto Citas"""
+        return f"<Cita(id={self.id_citas}, servicio='{self.id_servicio}', animal='{self.id_animal}')>"
     
     def to_dict(self):
         """Convierte el objeto a un diccionario"""
         return {
-            'id': self.id_Citas,
-            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
-            'fecha_atencion': self.fecha_atencion.isoformat() if self.fecha_atencion else None,
-            'fecha_edicion': self.fecha_edicion.isoformat() if self.fecha_edicion else None
+            "id_citas": self.id_citas,
+            "id_servicio": self.id_servicio,
+            "id_animal": self.id_animal,
+            "fecha_asignacion": self.fecha_asignacion,
+            "fecha_atencion": self.fecha_atencion
         }
