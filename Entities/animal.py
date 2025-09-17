@@ -8,7 +8,8 @@ from pydantic import BaseModel, Field, validator
 from typing import Optional
 from sqlalchemy.sql import func
 
-from ..Database.config import Base  # Asegúrate de que la ruta es correcta
+from Database.config import Base
+ # Asegúrate de que la ruta es correcta
 
 
 class Animal(Base):
@@ -18,16 +19,17 @@ class Animal(Base):
     __tablename__ = 'animales'
 
     id_animal = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    id_usuario = Column(UUID(as_uuid=True), ForeignKey('usuarios.id_usuario'), nullable=False)
+    id_usuario = Column(UUID(as_uuid=True), ForeignKey('usuarios.id_usuario'))
     nombre_animal = Column(String(200), nullable=False, index=True)
     edad_animal = Column(CHAR(4), nullable=False)
     id_genero = Column(UUID(as_uuid=True), ForeignKey('generos.id_genero'), nullable=False)
-    id_raza = Column(UUID(as_uuid=True), ForeignKey('razas.id_raza'), nullable=False)
-    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
+    id_raza = Column(UUID(as_uuid=True), ForeignKey('Raza_animal.id_raza'), nullable=False)
+    id_usuario_crea = id_usuario = Column(UUID(as_uuid=True), ForeignKey('usuarios.id_usuario'))
     id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
     # Relaciones
+
     genero = relationship("Genero", back_populates="animales")
     usuario = relationship("Usuario", back_populates="animales")  # si tienes Usuario
     # raza = relationship("Raza", back_populates="animales")        # si tienes Raza

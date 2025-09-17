@@ -1,7 +1,8 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey, Float, func
 from sqlalchemy.orm import relationship
-from ..Database.config import Base
-from uuid import UUID
+from sqlalchemy.dialects.postgresql import UUID   # 👈 este es el correcto
+from Database.config import Base
+import uuid  # 👈 para generar nuevos UUIDs
 
 class Servicios(Base):
     """
@@ -15,7 +16,12 @@ class Servicios(Base):
     
     __tablename__ = "Servicios"
     
-    id_servicio = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    id_servicio = Column(
+        UUID(as_uuid=True), 
+        primary_key=True, 
+        default=uuid.uuid4,        # 👈 genera automáticamente un UUID nuevo
+        nullable=False
+    )
     nombre_ser = Column(String(100), nullable=False, unique=True)
     costo = Column(Float, nullable=False)
 

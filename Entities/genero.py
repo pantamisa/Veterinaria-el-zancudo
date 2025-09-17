@@ -7,7 +7,8 @@ from pydantic import BaseModel, Field, validator
 from sqlalchemy.sql import func
 from datetime import datetime
 
-from ..Database.config import Base  # Ajusta a tu ruta real
+from Database.config import Base
+ # Ajusta a tu ruta real
 
 
 class Genero(Base):

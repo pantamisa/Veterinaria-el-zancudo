@@ -3,26 +3,18 @@ from sqlalchemy.orm import relationship
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
-from ..Database.config import Base
-from uuid import UUID
+from Database.config import Base
+
+from sqlalchemy.dialects.postgresql import UUID 
+import uuid  
 
 class Citas(Base):
-    """
-    Modelo de Citas que representa la tabla 'Citas'
-    
-    Atributos:
-        id_citas: Identificador único de cada cita
-        id_servicio: Identificador del servicio solicitado (clave foránea)
-        id_animal: Identificador del animal al que pertenece la cita (clave foránea)
-        fecha_asignacion: Fecha en que se asignó la cita
-        fecha_atencion: Fecha en que se atenderá la cita
-    """
     
     __tablename__ = "Citas"
     
     id_citas = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
     id_servicio = Column(UUID(as_uuid=True), ForeignKey("Servicios.id_servicio"), nullable=False)
-    id_animal = Column(UUID(as_uuid=True), ForeignKey("Animal.id_animal"), nullable=False)
+    id_animal = Column(UUID(as_uuid=True), ForeignKey('animales.id_animal'), nullable=False)
     fecha_asignacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_atencion = Column(DateTime(timezone=True), nullable=True)
 
