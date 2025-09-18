@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, validator
 from typing import Optional
 from sqlalchemy.sql import func
 
-from ..Database.config import Base  # Asegúrate de que la ruta es correcta
+from ..database.config import Base  # Asegúrate de que la ruta es correcta
 
 
 class Animal(Base):

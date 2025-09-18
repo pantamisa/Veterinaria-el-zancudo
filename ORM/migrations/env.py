@@ -13,13 +13,10 @@ from sqlalchemy import engine_from_config, pool
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # Importar los modelos para que Alembic los detecte
-from Database.config import Base
-from Entities.animal import Animal
-from Entities.genero import Genero
-from Entities.Citas import Citas
-from Entities.Raza_animal import Raza_animal
-from Entities.Tipo_animal import Tipo_animal
-from Entities.usuario import Usuario
+from database.config import Base
+from entities.categoria import Categoria
+from entities.producto import Producto
+from entities.usuario import Usuario
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -42,7 +39,7 @@ target_metadata = Base.metadata
 
 def get_url():
     """Obtener la URL de la base de datos desde variables de entorno"""
-    from Database.config import DATABASE_URL
+    from database.config import DATABASE_URL
 
     return DATABASE_URL
 

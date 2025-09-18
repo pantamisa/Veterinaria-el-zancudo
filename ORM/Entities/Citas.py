@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
-from ..Database.config import Base
+from ..database.config import Base
 from uuid import UUID
 
 class Citas(Base):
