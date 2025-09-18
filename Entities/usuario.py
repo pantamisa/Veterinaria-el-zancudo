@@ -11,34 +11,18 @@ from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 
-from ..Database.config import Base
+from Database.config import Base
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 class Usuario(Base):
-    """
-    Modelo de Usuario que representa la tabla 'usuarios'
-    
-    Atributos:
-        id: Identificador único del usuario
-        nombre: Nombre completo del usuario
-        email: Correo electrónico del usuario (único)
-        telefono: Número de teléfono del usuario
-        activo: Estado del usuario (activo/inactivo)
-        fecha_registro: Fecha y hora de registro
-        fecha_actualizacion: Fecha y hora de última actualización
-    """
-    
     __tablename__ = 'usuarios'
     
-    id_Usuario = Column(Integer, primary_key=True, autoincrement=True)
+    id_usuario = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     nombre = Column(String(100), nullable=False)
     apellido = Column(String(100), nullable=False)
     email = Column(String(120), unique=True, nullable=False, index=True)
-    telefono = Column(String(20), nullable=True)
-    activo = Column(Boolean, default=True, nullable=False)
-    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
-    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+    telefono = Column(String(20))
 
     
 

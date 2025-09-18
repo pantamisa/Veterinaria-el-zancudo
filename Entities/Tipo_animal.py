@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, UUID, DateTime, func
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
-from ..Database.config import Base
+from Database.config import Base
+
 import datetime
 
 class Tipo_animal(Base):
