@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey, Float, func
 from sqlalchemy.orm import relationship
-from ..Database.config import Base
+from ..database.config import Base
 from uuid import UUID
 
 class Servicios(Base):

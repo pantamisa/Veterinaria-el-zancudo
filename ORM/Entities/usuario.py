@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 
-from ..Database.config import Base
+from ..database.config import Base
 
 class Usuario(Base):
     """
