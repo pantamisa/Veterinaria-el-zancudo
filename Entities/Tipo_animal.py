@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, UUID, DateTime, func, ForeignKey
+from sqlalchemy import Column, Integer, String, UUID, DateTime, func
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
-from ..database.config import Base
+from ..Database.config import Base
 import datetime
 
 class Tipo_animal(Base):
@@ -24,18 +24,8 @@ class Tipo_animal(Base):
 
     # Relación con Raza_animal
     razas = relationship("Raza_animal", back_populates="Tipo_animal", cascade="all, delete-orphan")
-    
-    # Campos de auditoría
-    id_usuario_crea = Column(
-        UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=False
-    )
-    id_usuario_edita = Column(
-        UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=True
-    )
-
-    # Relaciones de auditoría
-    usuario_crea = relationship("usuario", foreign_keys=[id_usuario_crea], overlaps="usuario,usuario_crea,Tipo_animal")
-    usuario_edita = relationship("usuario", foreign_keys=[id_usuario_edita], overlaps="usuario,usuario_edita,Tipo_animal")
+    usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
         return f"<Tipo_animal(id_tipoAnimal={self.id_tipoAnimal}, nombre='{self.nombre}')>"

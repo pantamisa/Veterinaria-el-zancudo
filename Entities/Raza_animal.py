@@ -4,9 +4,8 @@ from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 
-from database.config import Base
-import uuid
-from uuid import UUID
+from ..Database.config import Base
+from uuid import UUID  #ponerselo a los id
 
 class Raza_animal(Base):
     """
@@ -19,32 +18,20 @@ class Raza_animal(Base):
     """
     
     __tablename__ = 'Raza_animal'
-    id_raza = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    
+    id_raza = Column(UUID, Integer, primary_key=True, autoincrement=True, nullable=False) #elegir uno de los dos UUID o Integer
     nombreRaza = Column(String(100), nullable=False)
     id_tipoAnimal=Column(Integer, ForeignKey('Tipo_animal.id_tipoAnimal'), nullable=False, autoincrement=True)
+    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
+    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Claves foráneas
-    id_tipoAnimal = Column(
-        UUID(as_uuid=True), ForeignKey("Tipo_animal.id_tipoAnimal"), nullable=False
-    )
-
-    # Campos de auditoría
-    id_usuario_crea = Column(
-        UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=False
-    )
-    id_usuario_edita = Column(
-        UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=True
-    )
-
-    # Relaciones //aquí van las relaciones de cada entidad
-    Tipo_animal = relationship("Tipo_animal", back_populates="razas", overlaps="Tipo_animal,Raza")  
-    animal = relationship("Animal", back_populates="raza", cascade="all, delete-orphan", overlaps="raza,animales")
-
-    # Relaciones de auditoría
-    usuario_crea = relationship("usuario", foreign_keys=[id_usuario_crea], overlaps="usuario,usuario_crea,Raza")
-    usuario_edita = relationship("usuario", foreign_keys=[id_usuario_edita], overlaps="usuario,usuario_edita,Raza")
+    
+    # Relaciones //aquí van las relaciones de cada tabla
+    id_tipoAnimal = relationship("Tipo_animal", back_populates="razas")   
+    usuario_crea = relationship("usuario", foreign_keys=[id_usuario_crea])
+    usuario_edita = relationship("usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
         """Representación en string del objeto Usuario"""
