@@ -18,13 +18,13 @@ class Citas(Base):
     fecha_asignacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_atencion = Column(DateTime(timezone=True), nullable=True)
 
-    # Auditoría
+    
     id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
     id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Relaciones
+   
     servicio = relationship("Servicios", back_populates="citas")
     animal = relationship("Animal", back_populates="citas")
     usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
