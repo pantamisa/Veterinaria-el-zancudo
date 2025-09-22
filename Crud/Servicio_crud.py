@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from Models.servicios import Servicios  # Ajusta la ruta al modelo correcto
+from Entities.Servicios import Servicios  # Ajusta la ruta al modelo correcto
 
 # ========== CREAR ==========
 def crear_servicio(db: Session, nombre_ser: str, costo: float):
