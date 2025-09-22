@@ -4,7 +4,33 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from Database.config import Base
+from pydantic import BaseModel, Field
+from typing import Optional
+import uuid
 
+class AnimalBase(BaseModel):
+    nombre_animal: str = Field(..., min_length=1, max_length=200)
+    edad_animal: str = Field(..., max_length=4)
+    id_genero: uuid.UUID
+    id_raza: uuid.UUID
+
+class AnimalCreate(AnimalBase):
+    id_usuario: uuid.UUID  # propietario
+    id_usuario_crea: uuid.UUID  # quien lo registra
+
+class AnimalUpdate(BaseModel):
+    nombre_animal: Optional[str] = None
+    edad_animal: Optional[str] = None
+    id_genero: Optional[uuid.UUID] = None
+    id_raza: Optional[uuid.UUID] = None
+    id_usuario_edita: Optional[uuid.UUID] = None
+
+class AnimalResponse(AnimalBase):
+    id_animal: uuid.UUID
+    id_usuario: uuid.UUID
+    
+    class Config:
+        from_attributes = True
 class Animal(Base):
     __tablename__ = 'animales'
 
