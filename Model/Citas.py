@@ -1,19 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from Crud.Citas_crud import crear_cita, obtener_citas, obtener_cita, actualizar_cita, eliminar_cita
 from Citas import menu_usuarios
-# ============================
-# Configuración de la conexión Neon
-# ============================
-DATABASE_URL = "postgresql://neondb_owner:npg_MDXR0Zj6mzvY@ep-young-boat-ae7ls9d8-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-
-# Crear motor de conexión
-engine = create_engine(DATABASE_URL)
-
-# Crear sesión
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
 # ============================
 # Submenú Citas
 # ============================

@@ -1,17 +1,4 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from Crud.Usuario_crud import create_usuario, get_usuario, update_usuario, delete_usuario, login_usuario
-# ============================
-# Configuración de la conexión Neon
-# ============================
-DATABASE_URL = "postgresql://neondb_owner:npg_MDXR0Zj6mzvY@ep-young-boat-ae7ls9d8-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-
-# Crear motor de conexión
-engine = create_engine(DATABASE_URL)
-
-# Crear sesión
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 # ============================
 # Submenú Usuarios
