@@ -1,53 +1,89 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
-from sqlalchemy.orm import relationship
-from pydantic import BaseModel, Field
-from datetime import datetime
-from typing import Optional
-from ..Database.config import Base
-from uuid import UUID
+from Crud.Citas_crud import crear_cita, obtener_citas, obtener_cita, actualizar_cita, eliminar_cita
+from Citas import menu_usuarios
+# ============================
+# Submenú Citas
+# ============================
+def menu_citas(db):
+    while True:
+        print("\n===== SUBMENÚ CITAS =====")
+        print("1. Crear Cita")
+        print("2. Listar Todas las Citas")
+        print("3. Consultar Cita por ID")
+        print("4. Actualizar Cita")
+        print("5. Eliminar Cita")
+        print("0. Volver al Menú Principal")
+        opcion = input("Seleccione una opción: ")
 
-class Citas(Base):
-    """
-    Modelo de Citas que representa la tabla 'Citas'
-    
-    Atributos:
-        id_citas: Identificador único de cada cita
-        id_servicio: Identificador del servicio solicitado (clave foránea)
-        id_animal: Identificador del animal al que pertenece la cita (clave foránea)
-        fecha_asignacion: Fecha en que se asignó la cita
-        fecha_atencion: Fecha en que se atenderá la cita
-    """
-    
-    __tablename__ = "Citas"
-    
-    id_citas = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
-    id_servicio = Column(UUID(as_uuid=True), ForeignKey("Servicios.id_servicio"), nullable=False)
-    id_animal = Column(UUID(as_uuid=True), ForeignKey("Animal.id_animal"), nullable=False)
-    fecha_asignacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_atencion = Column(DateTime(timezone=True), nullable=True)
+        if opcion == "1":
+            id_servicio = input("ID del servicio: ")
+            id_animal = input("ID del animal: ")
+            id_usuario_crea = input("ID del usuario que crea: ")
+            fecha_atencion = input("Fecha de atención (YYYY-MM-DD HH:MM, opcional): ") or None
+            cita = crear_cita(db, id_servicio, id_animal, id_usuario_crea, fecha_atencion)
+            print("Cita creada:", cita)
 
-    # Auditoría
-    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
-    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+        elif opcion == "2":
+            citas = obtener_citas(db)
+            for c in citas:
+                print(c)
 
-    # Relaciones
-    servicio = relationship("Servicios", back_populates="citas")
-    animal = relationship("Animal", back_populates="citas")
-    usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
-    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
+        elif opcion == "3":
+            id_cita = input("ID de la cita: ")
+            cita = obtener_cita(db, id_cita)
+            print("Cita:", cita if cita else "No encontrada")
 
-    def __repr__(self):
-        """Representación en string del objeto Citas"""
-        return f"<Cita(id={self.id_citas}, servicio='{self.id_servicio}', animal='{self.id_animal}')>"
-    
-    def to_dict(self):
-        """Convierte el objeto a un diccionario"""
-        return {
-            "id_citas": self.id_citas,
-            "id_servicio": self.id_servicio,
-            "id_animal": self.id_animal,
-            "fecha_asignacion": self.fecha_asignacion,
-            "fecha_atencion": self.fecha_atencion
-        }
+        elif opcion == "4":
+            id_cita = input("ID de la cita a actualizar: ")
+            campo = input("Campo a actualizar (id_servicio, id_animal, fecha_atencion, id_usuario_edita): ")
+            valor = input("Nuevo valor: ")
+            cita = actualizar_cita(db, id_cita, **{campo: valor})
+            print("Cita actualizada:", cita if cita else "No encontrada")
+
+        elif opcion == "5":
+            id_cita = input("ID de la cita a eliminar: ")
+            cita = eliminar_cita(db, id_cita)
+            print("Cita eliminada" if cita else "No encontrada")
+
+        elif opcion == "0":
+            break
+        else:
+            print("Opción inválida")
+
+
+# ============================
+# Menú principal
+# ============================
+def menu_principal(db):
+    while True:
+        print("\n========= MENÚ PRINCIPAL =========")
+        print("1. Gestión de Usuarios")
+        print("2. Gestión de Citas")
+        print("0. Salir")
+        print("==================================")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            menu_usuarios(db)
+        elif opcion == "2":
+            menu_citas(db)
+        elif opcion == "0":
+            print("Saliendo del sistema...")
+            break
+        else:
+            print("Opción inválida")
+
+"""
+# ============================
+# Ejecutar aplicación
+# ============================
+def main():
+    db = SessionLocal()
+    try:
+        menu_principal(db)
+    finally:
+        db.close()
+
+
+if __name__ == "__main__":
+    main()
+"""
