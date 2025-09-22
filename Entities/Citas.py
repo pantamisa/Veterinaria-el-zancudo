@@ -1,3 +1,4 @@
+
 import uuid
 from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey
@@ -37,6 +38,7 @@ class Citas(Base):
 
     def __repr__(self):
         return f"<Citas(id_citas={self.id_citas}, servicio='{self.id_servicio}', animal='{self.id_animal}')>"
+
 
     def to_dict(self):
         return {
