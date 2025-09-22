@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from Entities.usuario import Usuario
-from utils_password import hash_password, verify_password
+from .utils_password import hash_password, verify_password
 import uuid
 
 # Crear usuario (con hash automático)
