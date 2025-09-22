@@ -30,6 +30,8 @@ class Citas(Base):
     usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
     usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
 
+    facturas = relationship("Factura", back_populates="cita", cascade="all, delete-orphan")
+
     def __repr__(self):
         """Representación en string del objeto Citas"""
         return f"<Cita(id={self.id_citas}, servicio='{self.id_servicio}', animal='{self.id_animal}')>"

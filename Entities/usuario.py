@@ -1,10 +1,3 @@
-"""
-Entidad Usuario
-===============
-
-Modelo de Usuario con SQLAlchemy y esquemas de validación con Pydantic.
-"""
-
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, UUID, func
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel, EmailStr, Field, validator
@@ -29,12 +22,11 @@ class Usuario(Base):
     activo = Column(Boolean, default=True)
     es_admin = Column(Boolean, default=False)
 
-    # Fechas opcionales
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
+    animales = relationship("Animal", back_populates="usuario", foreign_keys="Animal.id_usuario")
+    citas_creadas = relationship("Citas", back_populates="usuario_creador", foreign_keys="Citas.id_usuario_crea")
+    citas_editadas = relationship("Citas", back_populates="usuario_editor", foreign_keys="Citas.id_usuario_edita")
+    facturas_pagadas = relationship("Factura", back_populates="usuario_pago", foreign_keys="Factura.id_usuario_pago")
 
-    # Relación con animales (un usuario puede tener muchos animales)
-    animales = relationship("Animal", back_populates="usuario", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Usuario(id_usuario={self.id_usuario}, nombre='{self.nombre}', email='{self.email}')>"
@@ -48,6 +40,4 @@ class Usuario(Base):
             'telefono': self.telefono,
             'activo': self.activo,
             'es_admin': self.es_admin,
-            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
-            'fecha_edicion': self.fecha_edicion.isoformat() if self.fecha_edicion else None,
         }

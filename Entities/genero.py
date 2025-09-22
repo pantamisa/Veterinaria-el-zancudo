@@ -20,8 +20,6 @@ class Genero(Base):
     id_genero = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     nombre_genero = Column(String(10), nullable=False, index=True)
 
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
     # Relación inversa para ver animales de este género
     animales = relationship("Animal", back_populates="genero")
 
