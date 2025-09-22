@@ -16,24 +16,12 @@ class Servicios(Base):
     
     __tablename__ = "Servicios"
     
-    id_servicio = Column(
-        UUID(as_uuid=True), 
-        primary_key=True, 
-        default=uuid.uuid4,       
-        nullable=False
-    )
+    id_servicio = Column(UUID(as_uuid=True), primary_key=True,  default=uuid.uuid4, nullable=False )
     nombre_ser = Column(String(100), nullable=False, unique=True)
     costo = Column(Float, nullable=False)
 
-    id_usuario_crea = Column(UUID(as_uuid=True), nullable=False)
-    id_usuario_edita = Column(UUID(as_uuid=True), nullable=True, default=None)
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
     citas = relationship("Citas", back_populates="servicio")
-
-    usuario_crea = relationship("Usuario", foreign_keys=[id_usuario_crea])
-    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
 
     def __repr__(self):
         """Representación en string del objeto Servicios"""
