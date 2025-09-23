@@ -33,7 +33,6 @@ class UsuarioMenu:
             print("1. Crear Usuario")
             print("2. Consultar Usuario por ID")
             print("3. Actualizar Usuario")
-            print("4. Eliminar Usuario")
             print("5. Login de Usuario")
             print("6. Listar Usuarios")
             print("0. Volver al Menú Principal")
@@ -45,8 +44,6 @@ class UsuarioMenu:
                 self.consultar_usuario()
             elif opcion == "3":
                 self.actualizar_usuario()
-            elif opcion == "4":
-                self.eliminar_usuario()
             elif opcion == "5":
                 self.login_usuario()
             elif opcion == "6":
@@ -81,11 +78,6 @@ class UsuarioMenu:
         valor = input("Nuevo valor: ")
         usuario = update_usuario(self.db, id_usuario, **{campo: valor})
         print("✅ Usuario actualizado:", usuario if usuario else "❌ No encontrado")
-
-    def eliminar_usuario(self):
-        id_usuario = self.pedir_uuid("ID del usuario a eliminar (UUID): ")
-        eliminado = delete_usuario(self.db, id_usuario)
-        print("✅ Eliminado" if eliminado else "❌ No encontrado")
 
     def login_usuario(self):
         email = input("Email: ")
