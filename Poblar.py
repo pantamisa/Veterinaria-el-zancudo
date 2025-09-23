@@ -452,6 +452,45 @@ def CrearTiposYRazas():
     finally:
         db.close()
 
+def CrearUsuarioPrueba02():
+    """Crear usuario de prueba con manejo de sesión"""
+    db = SessionLocal()
+    try:
+        # Verificar si el usuario ya existe
+        usuario_existente = db.query(Usuario).filter(Usuario.email == "Admin@admin.com").first()
+        if usuario_existente:
+            print("✅ El usuario de prueba ya existe")
+            return usuario_existente
+
+        # Crear usuario
+        nuevo = create_usuario(
+            db,
+            nombre="Admin",
+            apellido="_____", 
+            email="Admin@admin.com",
+            telefono="123456",
+            password="abc1234",
+            es_admin=True
+        )
+
+        print("Usuario creado:", nuevo.to_dict())
+
+        # Login de prueba
+        usuario_login = login_usuario(db, "Admin@admin.com", "abc1234")
+        if usuario_login:
+            print("✅ Login correcto:", usuario_login.nombre)
+        else:
+            print("❌ Credenciales incorrectas")
+            
+        return nuevo
+
+    except Exception as e:
+        print(f"❌ Error al crear usuario: {e}")
+        db.rollback()
+        return None
+    finally:
+        db.close()
+
 def poblar_datos_iniciales():
     """Función principal para poblar todos los datos iniciales"""
     print("🔄 Iniciando población de datos...")
@@ -468,7 +507,8 @@ def poblar_datos_iniciales():
     #CrearUsuarioPrueba()
     #crear_usuarios_adicionales()
     #crear_animales_prueba()
-    crear_cita_ejemplo()
+    #crear_cita_ejemplo()
+    CrearUsuarioPrueba02()
     print("✅ Población de datos completada exitosamente")
 
 if __name__ == "__main__":
