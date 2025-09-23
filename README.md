@@ -19,22 +19,6 @@ Un sistema completo de gestión para clínicas veterinarias desarrollado en Pyth
 - **getpass**: Para manejo seguro de contraseñas
 - **os/sys**: Para funcionalidades del sistema operativo
 
-## 📦 Estructura del Proyecto
-
-```
-proyecto/
-├── main.py                 # Archivo principal del sistema
-├── Entities/               # Entidades del sistema
-│   └── usuario.py         # Modelo de usuario
-├── Crud/                  # Operaciones CRUD
-│   └── Usuario_crud.py    # CRUD de usuarios
-├── Usuario.py             # Menú de gestión de usuarios
-├── Animal.py              # Menú de gestión de animales
-├── Citas.py               # Menú de gestión de citas
-├── factura.py             # Menú de gestión de facturas
-└── README.md              # Este archivo
-```
-
 ## 🚀 Instalación
 
 ### Prerrequisitos
