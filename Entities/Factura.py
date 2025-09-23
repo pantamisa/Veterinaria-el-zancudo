@@ -26,7 +26,7 @@ class Factura(Base):
     costo = Column(Numeric(10, 2), nullable=False)
 
     # FK usuario que paga
-    id_usuario_pago = Column(UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=False)
+    id_usuario_pago = Column(UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=True)
 
     # ✅ RELACIONES CORREGIDAS
     cita = relationship("Citas", back_populates="facturas")  # Singular y back_populates correcto
