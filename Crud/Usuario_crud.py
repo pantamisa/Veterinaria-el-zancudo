@@ -44,6 +44,13 @@ def delete_usuario(db: Session, id_usuario: uuid.UUID) -> bool:
     usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
     if not usuario:
         return False
+
+    # Poner en NULL el id_usuario_pago de las facturas asociadas
+    from Entities.Factura import Factura
+    facturas = db.query(Factura).filter(Factura.id_usuario_pago == id_usuario).all()
+    for factura in facturas:
+        factura.id_usuario_pago = None
+
     db.delete(usuario)
     db.commit()
     return True
