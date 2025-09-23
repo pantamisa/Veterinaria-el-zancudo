@@ -1,5 +1,5 @@
 from Crud.Citas_crud import crear_cita, obtener_citas, obtener_cita, actualizar_cita, eliminar_cita
-from Citas import menu_usuarios
+from Usuario import menu_usuarios
 # ============================
 # Submenú Citas
 # ============================
