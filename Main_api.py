@@ -68,6 +68,8 @@ async def root():
         "endpoints": {
             "Usuarios": "/usuarios",
             "Servicios": "/servicios",
+            "Animal": "/Animal",
+            "TipoAnimal": "/tipoanimal",
             "Factura": "/Factura",
             "Citas": "/Citas",
             "Razas_animal": "/Razas_animal",
