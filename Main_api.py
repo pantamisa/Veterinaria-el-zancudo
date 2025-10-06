@@ -6,6 +6,7 @@ API REST con FastAPI - Sin interfaz de consola
 
 import uvicorn
 from Apis import Autenticar,Usuario
+from Apis import Servicios, Factura, Citas
 from Database.config import create_tables
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,8 +30,10 @@ app.add_middleware(
 )
 
 # Incluir los routers de las APIs
-
 app.include_router(Usuario.router)
+app.include_router(Servicios.router)
+app.include_router(Factura.router)
+app.include_router(Citas.router)
 
 
 
@@ -54,6 +57,7 @@ async def root():
         "redoc": "/redoc",
         "endpoints": {
             "Usuarios": "/usuarios",
+            "Servicios": "/servicios",
         },
     }
 
