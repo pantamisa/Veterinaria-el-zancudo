@@ -168,7 +168,7 @@ async def actualizar_tipo_animal(
                 )
 
         tipo_actualizado = crud.actualizar_tipo_animal(
-            id_tipoAnimal, **tipo_data.dict(exclude_unset=True)
+            id_tipoAnimal, **tipo_data.model_dump(exclude_unset=True)
         )
         return tipo_actualizado
 
