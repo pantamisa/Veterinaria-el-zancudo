@@ -5,7 +5,7 @@ API REST con FastAPI - Sin interfaz de consola
 """
 
 import uvicorn
-from Apis import Autenticar,Usuario
+from Apis import Autenticar,Usuario,Razas_animal
 from Apis import Servicios, Factura, Citas
 from Database.config import create_tables
 from fastapi import FastAPI
@@ -34,7 +34,8 @@ app.include_router(Usuario.router)
 app.include_router(Servicios.router)
 app.include_router(Factura.router)
 app.include_router(Citas.router)
-
+app.include_router(Razas_animal.router)
+app.include_router(Autenticar.router)
 
 
 @app.on_event("startup")
@@ -58,6 +59,10 @@ async def root():
         "endpoints": {
             "Usuarios": "/usuarios",
             "Servicios": "/servicios",
+            "Factura": "/Factura",
+            "Citas": "/Citas",
+            "Razas_animal": "/Razas_animal",
+            "Autenticar": "/Autenticar"
         },
     }
 

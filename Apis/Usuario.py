@@ -23,8 +23,6 @@ from Schemas import (
     UsuarioCreate,
     UsuarioUpdate,
     UsuarioResponse,
-    UsuarioLogin,
-    LoginResponse,
     CambioContraseña,
     RespuestaAPI
 )
@@ -186,34 +184,6 @@ async def crear_usuario(
             detail=f"Error al crear usuario: {str(e)}"
         )
 
-
-@router.post("/login", response_model=LoginResponse)
-async def login(
-    credentials: UsuarioLogin,
-    db: Session = Depends(get_db)
-):
-    """
-    Iniciar sesión con email y contraseña.
-    
-    - **email**: Email del usuario
-    - **password**: Contraseña del usuario
-    """
-    try:
-        usuario = login_usuario(db, credentials.email, credentials.password)
-        
-        if not usuario:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Credenciales inválidas"
-            )
-        
-        # En producción, aquí generarías un token JWT
-        token_simulado = f"token_{usuario.id_usuario}"
-        
-        return LoginResponse(
-            token=token_simulado,
-            usuario=usuario
-        )
         
     except HTTPException:
         raise
