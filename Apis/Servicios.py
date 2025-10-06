@@ -2,9 +2,6 @@
 Veterinaria El Zancudo
 """
 
-# Si este módulo se ejecuta directamente (python Apis/Servicios.py),
-# asegurarse de que la raíz del repositorio esté en sys.path para
-# que las importaciones de nivel superior (p. ej. `Database.config`) funcionen.
 import os
 import sys
 repo_root = os.path.dirname(os.path.dirname(__file__))
