@@ -1,6 +1,36 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
 from Entities.Citas import Citas  # Ajusta la ruta al modelo correcto
+import uuid
+
+def crear_cita(db: Session, id_servicio: uuid.UUID, id_animal: uuid.UUID, id_usuario_crea: uuid.UUID, fecha_atencion=None):
+    """Crea una nueva cita."""
+    nueva_cita = Citas(
+        id_servicio=id_servicio,
+        id_animal=id_animal,
+        id_usuario_crea=id_usuario_crea,
+        fecha_atencion=fecha_atencion
+    )
+    db.add(nueva_cita)
+    db.commit()
+    db.refresh(nueva_cita)
+    return nueva_cita
+
+def obtener_citas_con_detalles(db: Session):
+    """Obtiene todas las citas con información de servicios y animales."""
+    return db.query(Citas).options(
+        db.joinedload(Citas.servicio),
+        db.joinedload(Citas.animal)
+    ).all()
+
+def obtener_citas_por_animal(db: Session, id_animal: uuid.UUID):
+    """Obtiene las citas de un animal específico."""
+    return db.query(Citas).filter(Citas.id_animal == id_animal).all()
+
+def obtener_citas_pendientes(db: Session):
+    """Obtiene citas que no han sido atendidas."""
+    return db.query(Citas).filter(Citas.fecha_atencion.is_(None)).all()
+
 
 # ========== CREAR ==========
 def crear_cita(db: Session, id_servicio, id_animal, id_usuario_crea, fecha_atencion=None):

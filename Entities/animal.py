@@ -1,20 +1,37 @@
-# models/animal.py
 import uuid
-from datetime import datetime
 from sqlalchemy import Column, String, DateTime, ForeignKey, CHAR
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel, Field, validator
-from typing import Optional
 from sqlalchemy.sql import func
-
 from Database.config import Base
+from pydantic import BaseModel, Field
+from typing import Optional
+import uuid
 
+class AnimalBase(BaseModel):
+    nombre_animal: str = Field(..., min_length=1, max_length=200)
+    edad_animal: str = Field(..., max_length=4)
+    id_genero: uuid.UUID
+    id_raza: uuid.UUID
 
+class AnimalCreate(AnimalBase):
+    id_usuario: uuid.UUID  # propietario
+    id_usuario_crea: uuid.UUID  # quien lo registra
+
+class AnimalUpdate(BaseModel):
+    nombre_animal: Optional[str] = None
+    edad_animal: Optional[str] = None
+    id_genero: Optional[uuid.UUID] = None
+    id_raza: Optional[uuid.UUID] = None
+    id_usuario_edita: Optional[uuid.UUID] = None
+
+class AnimalResponse(AnimalBase):
+    id_animal: uuid.UUID
+    id_usuario: uuid.UUID
+    
+    class Config:
+        from_attributes = True
 class Animal(Base):
-    """
-    Modelo de Animal que representa la tabla 'animales'
-    """
     __tablename__ = 'animales'
 
     id_animal = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
@@ -24,21 +41,38 @@ class Animal(Base):
     id_genero = Column(UUID(as_uuid=True), ForeignKey('generos.id_genero'), nullable=False)
     id_raza = Column(UUID(as_uuid=True), ForeignKey('Raza_animal.id_raza'), nullable=False)
 
-    # 🔹 Trazabilidad
+    # Trazabilidad
     id_usuario_crea = Column(UUID(as_uuid=True), ForeignKey('usuarios.id_usuario'), nullable=False)
     id_usuario_edita = Column(UUID(as_uuid=True), ForeignKey('usuarios.id_usuario'), nullable=True)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_edicion = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Relaciones con Usuario
-    usuario_propietario = relationship("Usuario", back_populates="animales", foreign_keys=[id_usuario])
-    usuario_creador = relationship("Usuario", back_populates="animales_creados", foreign_keys=[id_usuario_crea])
-    usuario_editor = relationship("Usuario", back_populates="animales_editados", foreign_keys=[id_usuario_edita])
+    # 🔹 Relaciones con Usuario (especificando foreign_keys)
+    # 🔹 Relaciones con Usuario
+    usuario_propietario = relationship(
+        "Usuario",
+        back_populates="animales",
+        foreign_keys=[id_usuario]
+    )
+    usuario_creador = relationship(
+        "Usuario",
+        back_populates="animales_creados",
+        foreign_keys=[id_usuario_crea]
+    )
+    usuario_editor = relationship(
+        "Usuario",
+        back_populates="animales_editados",
+        foreign_keys=[id_usuario_edita]
+    )
 
-    # Relaciones con Citas
-    citas = relationship("Cita", back_populates="animal", cascade="all, delete-orphan")
-    raza = relationship("Raza_animal", back_populates="animales")  # ajusta cuando tengas la clase de raza
+    # 🔹 Relación con otras tablas
+
+    raza = relationship("Raza_animal", back_populates="animales")
+    genero = relationship("Genero", back_populates="animales")
+    citas = relationship("Citas", back_populates="animal", cascade="all, delete-orphan")
+
+
+
 
     def __repr__(self):
         return f"<Animal(id_animal={self.id_animal}, nombre_animal='{self.nombre_animal}')>"
-

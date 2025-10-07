@@ -1,26 +1,24 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from Entities.Raza_animal import Raza_animal
+import uuid
 
 class RazaAnimalCRUD:
     def __init__(self, db: Session):
         self.db = db
 
-    def crear_raza_animal(
-        self, nombreRaza: str, id_tipoAnimal: int, id_usuario_crea: str
-    ) -> Raza_animal:
+    def crear_raza_animal(self, nombreRaza: str, id_tipoAnimal: uuid.UUID) -> Raza_animal:
         """Crear una nueva raza de animal"""
         raza = Raza_animal(
             nombreRaza=nombreRaza,
             id_tipoAnimal=id_tipoAnimal,
-            id_usuario_crea=id_usuario_crea,
         )
         self.db.add(raza)
         self.db.commit()
         self.db.refresh(raza)
         return raza
 
-    def obtener_raza(self, id_raza: int) -> Optional[Raza_animal]:
+    def obtener_raza(self, id_raza: uuid.UUID) -> Optional[Raza_animal]:
         """Obtener una raza de animal por ID"""
         return self.db.query(Raza_animal).filter(Raza_animal.id_raza == id_raza).first()
 
@@ -36,9 +34,7 @@ class RazaAnimalCRUD:
         """Obtener lista de razas con paginación"""
         return self.db.query(Raza_animal).offset(skip).limit(limit).all()
 
-    def obtener_razas_por_tipo(
-        self, id_tipoAnimal: int, skip: int = 0, limit: int = 100
-    ) -> List[Raza_animal]:
+    def obtener_razas_por_tipo(self, id_tipoAnimal: uuid.UUID, skip: int = 0, limit: int = 100) -> List[Raza_animal]:
         """Obtener todas las razas de un tipo de animal"""
         return (
             self.db.query(Raza_animal)
@@ -48,13 +44,10 @@ class RazaAnimalCRUD:
             .all()
         )
 
-    def actualizar_raza_animal(
-        self, id_raza: int, id_usuario_edita: str, **kwargs
-    ) -> Optional[Raza_animal]:
+    def actualizar_raza_animal(self, id_raza: uuid.UUID, **kwargs) -> Optional[Raza_animal]:
         """Actualizar una raza de animal"""
         raza = self.obtener_raza(id_raza)
         if raza:
-            raza.id_usuario_edita = id_usuario_edita
             for key, value in kwargs.items():
                 if hasattr(raza, key):
                     setattr(raza, key, value)
@@ -62,7 +55,7 @@ class RazaAnimalCRUD:
             self.db.refresh(raza)
         return raza
 
-    def eliminar_raza_animal(self, id_raza: int) -> bool:
+    def eliminar_raza_animal(self, id_raza: uuid.UUID) -> bool:
         """Eliminar una raza de animal"""
         raza = self.obtener_raza(id_raza)
         if raza:
