@@ -4,7 +4,7 @@ from sqlalchemy import Column, DateTime, Boolean, ForeignKey, Numeric
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from Database.config import Base  # importa tu Base declarativa
+from Database.config import Base
 
 class Factura(Base):
     __tablename__ = "facturas"
@@ -19,18 +19,18 @@ class Factura(Base):
     # Estado de pago
     pagada = Column(Boolean, default=False, nullable=False)
 
-    # FK a cita
-    id_cita = Column(UUID(as_uuid=True), ForeignKey("Citas.id_citas"), nullable=False)
+    # FK a cita - ✅ CORREGIDO: tabla en minúscula
+    id_cita = Column(UUID(as_uuid=True), ForeignKey("citas.id_citas"), nullable=False)
 
     # Costo del servicio
-    costo = Column(Numeric(10, 2), nullable=False)  # 10 dígitos, 2 decimales
+    costo = Column(Numeric(10, 2), nullable=False)
 
     # FK usuario que paga
-    id_usuario_pago = Column(UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=False)
+    id_usuario_pago = Column(UUID(as_uuid=True), ForeignKey("usuarios.id_usuario"), nullable=True)
 
-    # Relaciones
-    cita = relationship("Citas", back_populates="facturas")  
-    usuario_pago = relationship("Usuario")  # si quieres, puedes crear back_populates en Usuario
+    # ✅ RELACIONES CORREGIDAS
+    cita = relationship("Citas", back_populates="facturas")  # Singular y back_populates correcto
+    usuario_pago = relationship("Usuario")  # Sin back_populates porque Usuario no lo define
 
     def __repr__(self):
         return (

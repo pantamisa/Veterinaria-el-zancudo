@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from Entities.usuario import Usuario
-from utils_password import hash_password, verify_password
+from .utils_password import hash_password, verify_password
 import uuid
 
 # Crear usuario (con hash automático)
@@ -40,14 +40,62 @@ def update_usuario(db: Session, id_usuario: uuid.UUID, **kwargs) -> Usuario | No
     return usuario
 
 # Eliminar usuario
+# Eliminar usuario
 def delete_usuario(db: Session, id_usuario: uuid.UUID) -> bool:
-    usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
-    if not usuario:
-        return False
-    db.delete(usuario)
-    db.commit()
-    return True
+    """
+    Elimina un usuario manejando todas las relaciones Foreign Key
+    """
+    try:
+        usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
+        if not usuario:
+            return False
 
+        # 1. Manejar facturas - NO se pueden poner NULL porque es NOT NULL
+        # Opción A: Eliminar las facturas asociadas
+        from Entities.Factura import Factura
+        facturas = db.query(Factura).filter(Factura.id_usuario_pago == id_usuario).all()
+        for factura in facturas:
+            db.delete(factura)
+        
+        # 2. Manejar animales donde este usuario es propietario
+        from Entities.animal import Animal
+        animales_propietario = db.query(Animal).filter(Animal.id_usuario == id_usuario).all()
+        for animal in animales_propietario:
+            # Opción: Eliminar los animales (y sus citas por cascade)
+            db.delete(animal)
+        
+        # 3. Manejar animales creados por este usuario
+        animales_creados = db.query(Animal).filter(Animal.id_usuario_crea == id_usuario).all()
+        for animal in animales_creados:
+            # Poner NULL o asignar a otro usuario
+            animal.id_usuario_crea = None
+        
+        # 4. Manejar animales editados por este usuario
+        animales_editados = db.query(Animal).filter(Animal.id_usuario_edita == id_usuario).all()
+        for animal in animales_editados:
+            animal.id_usuario_edita = None
+        
+        # 5. Manejar citas creadas por este usuario
+        from Entities.Citas import Citas
+        citas_creadas = db.query(Citas).filter(Citas.id_usuario_crea == id_usuario).all()
+        for cita in citas_creadas:
+            cita.id_usuario_crea = None
+        
+        # 6. Manejar citas editadas por este usuario
+        citas_editadas = db.query(Citas).filter(Citas.id_usuario_edita == id_usuario).all()
+        for cita in citas_editadas:
+            cita.id_usuario_edita = None
+
+        # Ahora sí eliminar el usuario
+        db.delete(usuario)
+        db.commit()
+        return True
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Error al eliminar usuario: {e}")
+        return False
+    
 # Login (comprueba email + password)
 def login_usuario(db: Session, email: str, password: str) -> Usuario | None:
     usuario = db.query(Usuario).filter(Usuario.email == email).first()
