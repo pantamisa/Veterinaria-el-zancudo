@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Crear la aplicación FastAPI
 app = FastAPI(
     title="Sistema de Gestión de Veterinaria El Zancudo",
-    description="API REST para gestión de entidades de la veterinaria El Zancudo",
+    description="API REST para gestión de entidades de la veterinaria El Zancudo"
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
