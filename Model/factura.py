@@ -1,3 +1,4 @@
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,7 +24,6 @@ class Factura:
             print("No hay citas registradas.")
         for c in citas:
             print(f"ID: {c.id_citas} | Animal: {c.id_animal} | Servicio: {c.id_servicio} | Fecha: {c.fecha_asignacion}")
-
     def listar_usuarios(self):
         print("\nUsuarios registrados:")
         usuarios = self.db.query(Usuario).all()
@@ -107,6 +107,7 @@ class Factura:
             print(f"ID: {factura.id_factura}\nCosto: {factura.costo}\nPagada: {factura.pagada}\nFecha generación: {factura.fecha_generacion}\nFecha pago: {factura.fecha_pago}")
         else:
             print("Factura no encontrada.")
+
 
     def pagar_factura(self):
         id_factura = self.pedir_uuid("ID de la factura a marcar como pagada (UUID): ")

@@ -11,6 +11,7 @@ from Entities.Raza_animal import Raza_animal
 from Entities.genero import Genero
 import uuid
 
+
 # Configuración de conexión a Neon (PostgreSQL)
 DATABASE_URL = 'postgresql://neondb_owner:npg_MDXR0Zj6mzvY@ep-young-boat-ae7ls9d8-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 engine = create_engine(DATABASE_URL)
@@ -35,6 +36,9 @@ class AnimalMenu:
         for u in usuarios:
             print(f"ID: {u.id_usuario} | Nombre: {u.nombre} {u.apellido} | Email: {u.email}")
 
+
+
+
     def listar_generos(self):
         print("\nGéneros registrados:")
         generos = self.db.query(Genero).all()
@@ -46,6 +50,7 @@ class AnimalMenu:
         razas = self.db.query(Raza_animal).all()
         for r in razas:
             print(f"ID: {r.id_raza} | Nombre: {r.nombreRaza}")
+
 
     def crear_animal(self):
         try:
@@ -89,6 +94,7 @@ class AnimalMenu:
         else:
             print("Animal no encontrado.")
 
+
     def actualizar_animal(self):
         id_animal = self.pedir_uuid("ID del animal a actualizar (UUID): ")
         try:
@@ -113,6 +119,7 @@ class AnimalMenu:
         except Exception as e:
             print(f"Error: {e}")
             self.db.rollback()
+
 
     def eliminar_animal(self):
         id_animal = self.pedir_uuid("ID del animal a eliminar (UUID): ")
