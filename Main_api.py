@@ -1,20 +1,27 @@
-
 """
 Sistema de gestión de productos con ORM SQLAlchemy y Neon PostgreSQL
 API REST con FastAPI - Sin interfaz de consola
 """
 
 import uvicorn
-from Apis import Autenticar,Usuario,Razas_animal
-from Apis import Servicios, Factura, Citas
+from Apis import (
+    Autenticar,
+    Usuario,
+    Razas_animal,
+    Servicios,
+    Factura,
+    Citas,
+    Animal,
+    tipoanimal,
+)
 from Database.config import create_tables
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Crear la aplicación FastAPI
 app = FastAPI(
-    title="Sistema de Gestion de Veterinaria el Zancudo",
-    description="API REST para gestión de usuarios, categorías y productos con autenticación",
+    title="Sistema de Gestión de Veterinaria El Zancudo",
+    description="API REST para gestión de entidades de la veterinaria El Zancudo"
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -32,6 +39,8 @@ app.add_middleware(
 # Incluir los routers de las APIs
 app.include_router(Usuario.router)
 app.include_router(Servicios.router)
+app.include_router(Animal.router)
+app.include_router(tipoanimal.router)
 app.include_router(Factura.router)
 app.include_router(Citas.router)
 app.include_router(Razas_animal.router)
@@ -59,10 +68,12 @@ async def root():
         "endpoints": {
             "Usuarios": "/usuarios",
             "Servicios": "/servicios",
+            "Animal": "/Animal",
+            "TipoAnimal": "/tipoanimal",
             "Factura": "/Factura",
             "Citas": "/Citas",
             "Razas_animal": "/Razas_animal",
-            "Autenticar": "/Autenticar"
+            "Autenticar": "/Autenticar",
         },
     }
 
@@ -77,6 +88,7 @@ def main():
         reload=True,  # Recargar automáticamente en desarrollo
         log_level="info",
     )
+
 
 if __name__ == "__main__":
     main()
