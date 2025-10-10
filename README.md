@@ -8,44 +8,73 @@ Un sistema completo de gestión para clínicas veterinarias desarrollado en Pyth
 - **Gestión de Animales**: Control completo de mascotas y sus datos
 - **Gestión de Citas**: Programación y seguimiento de citas veterinarias
 - **Gestión de Facturas**: Sistema de facturación integrado
-- **Sistema de Roles**: Diferenciación entre administradores y usuarios estándar
-- **Interfaz Intuitiva**: Menús claros con iconos y navegación fácil
+  
+### Módulos Principales
+
+- ✅ **Gestión de Usuarios** - Registro, autenticación, roles (admin/usuario)
+- ✅ **Gestión de Animales** - Registro de mascotas con propietarios
+- ✅ **Tipos y Razas** - Clasificación de animales (Perro, Gato, Ave, etc.)
+- ✅ **Servicios** - Baño, Vacunas, Desparasitación, etc.
+- ✅ **Citas** - Programación de servicios veterinarios
+- ✅ **Facturación** - Generación y seguimiento de facturas
+
+### Funcionalidades
+
+- 🔐 Autenticación con hash de contraseñas (bcrypt)
+- 📊 API REST completa con FastAPI
+- 🖥️ Interfaz de consola interactiva
+- 🗄️ Base de datos PostgreSQL en la nube (Neon)
+- 📝 Documentación automática con Swagger/OpenAPI
+- 🔄 Relaciones complejas entre entidades
+- ✏️ CRUD completo para todas las entidades
+- 📈 Seguimiento de citas y pagos
+
+---
+
+Sistema completo de gestión veterinaria desarrollado con FastAPI, SQLAlchemy y PostgreSQL (Neon). Incluye gestión de usuarios, animales, citas, servicios y facturación.
+
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue.svg)](https://neon.tech/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 🛠️ Tecnologías Utilizadas
+  
+### Backend
+- **Python 3.9+**
+- **FastAPI 0.115.0** - Framework web moderno
+- **SQLAlchemy 2.0.23** - ORM para base de datos
+- **Pydantic 2.10.0** - Validación de datos
+- **PostgreSQL** - Base de datos relacional
 
-- **Python 3.x**: Lenguaje de programación principal
-- **SQLAlchemy**: ORM para manejo de base de datos
-- **PostgreSQL**: Base de datos (Neon Cloud)
-- **getpass**: Para manejo seguro de contraseñas
-- **os/sys**: Para funcionalidades del sistema operativo
+### Seguridad
+- **Bcrypt 4.1.2** - Hash de contraseñas
+- **Passlib 1.7.4** - Utilidades de seguridad
+
+### Base de Datos
+- **Neon PostgreSQL** - Base de datos serverless
+- **Alembic 1.13.1** - Migraciones de base de datos
+- **psycopg2-binary 2.9.10** - Adaptador PostgreSQL
+
+### Servidor
+- **Uvicorn 0.32.0** - Servidor ASGI de alto rendimiento
+
+---
+## 📋 Requisitos Previos
+
+- Python 3.9 o superior
+- pip (gestor de paquetes de Python)
+- Cuenta en [Neon](https://neon.tech) (base de datos PostgreSQL)
+- Git (opcional)
+
+---
 
 ## 🚀 Instalación
 
-### Prerrequisitos
-
-- Python 3.7 o superior
-- pip (gestor de paquetes de Python)
-- Conexión a internet (para la base de datos)
-
-### Pasos de Instalación
-
-1. **Clonar o descargar el proyecto**
-   ```bash
-   git clone [URL_DEL_REPOSITORIO]
-   cd sistema-veterinaria-el-zancudo
-   ```
-
-2. **Instalar dependencias**
-   ```bash
-   pip install sqlalchemy psycopg2-binary
-   ```
-
-3. **Configurar variables de entorno (opcional)**
-   Crear un archivo `.env` en la raíz del proyecto:
-   ```env
-   DATABASE_URL=postgresql://neondb_owner:npg_MDXR0Zj6mzvY@ep-young-boat-ae7ls9d8-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-   ```
-
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/veterinaria-el-zancudo.git
+cd veterinaria-el-zancudo
 ## ▶️ Ejecución
 
 Para iniciar el sistema, ejecutar:
@@ -218,25 +247,176 @@ El sistema está configurado para usar PostgreSQL en Neon Cloud. La cadena de co
 - Validación de permisos por rol de usuario
 - Conexión segura a base de datos con SSL
 
-## ⚠️ Solución de Problemas
+## ⚙️ Configuración
 
-### Error de Conexión a Base de Datos
-```
-❌ Error de conexión a la base de datos
-```
-**Solución**: Verificar conexión a internet y validez de la URL de base de datos.
+-1. Variables de Entorno
+Crea un archivo .env en la raíz del proyecto:
+env# Base de Datos
+DATABASE_URL=postgresql://usuario:contraseña@host:puerto/database
 
-### Módulo No Encontrado
-```
-ModuleNotFoundError: No module named 'sqlalchemy'
-```
-**Solución**: Instalar dependencias con `pip install sqlalchemy psycopg2-binary`
+# Configuración de la aplicación
+APP_NAME=Veterinaria El Zancudo
+APP_VERSION=1.0.0
+DEBUG=True
 
-### Error de Importación
-```
-ImportError: cannot import name 'X' from 'Y'
-```
-**Solución**: Verificar que todos los archivos del proyecto estén presentes y la estructura sea correcta.
+# Seguridad
+SECRET_KEY=tu-clave-secreta-muy-segura
+-2. Configurar Base de Datos
+Edita Database/config.py con tu URL de conexión de Neon:
+pythonDATABASE_URL = 'postgresql://tu_usuario:tu_contraseña@tu-host.neon.tech/tu_database?sslmode=require'
+-3. Crear las tablas
+bashpython -c "from Database.config import create_tables; create_tables()"
+-4. Poblar datos iniciales (opcional)
+bashpython Poblar.py
+Esto creará:
+Géneros (Macho, Hembra, Otro)
+Tipos de animales (Perro, Gato, Ave)
+Razas básicas
+Servicios (Baño, Vacunas, Desparasitar)
+Usuarios de prueba
+
+
+
+🎮 Uso
+-Opción 1: API REST (Recomendado)
+Iniciar el servidor
+bashpython Main_api.py
+El servidor estará disponible en:
+
+-API: http://localhost:8000
+Documentación Swagger: http://localhost:8000/docs
+ReDoc: http://localhost:8000/redoc
+
+-Ejemplos de uso de la Apis
+
+-Probar la API
+bash# Healthcheck
+curl http://localhost:8000/
+
+-Listar usuarios
+curl http://localhost:8000/usuarios/
+
+-Crear usuario
+curl -X POST http://localhost:8000/usuarios/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "email": "juan@example.com",
+    "telefono": "123456789",
+    "password": "password123",
+    "es_admin": false
+  }'
+
+# Login
+curl -X POST http://localhost:8000/autenticar/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "juan@example.com",
+    "password": "password123"
+  }'
+Opción 2: Menú de Consola
+bashpython Menu/menu_principal.py
+Credenciales de prueba:
+
+Email: kelvin@example.com
+Contraseña: miClaveSegura
+
+
+##📡 API Endpoints
+|Autenticación|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|POST  | /autenticar/login          |# Iniciar sesión|
+|POST  | /autenticar/registro       |# Registrar nuevo usuario|
+
+|Usuarios|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/usuarios/                 |# Listar todos los usuarios|
+|GET    |/usuarios/{id}             |# Obtener usuario por ID|
+|GET    |/usuarios/email/{email}    |# Obtener usuario por email|
+|POST   |/usuarios/                 |# Crear nuevo usuario|
+|PUT    |/usuarios/{id}             |# Actualizar usuario|
+|DELETE |/usuarios/{id}             |# Eliminar usuario|
+|GET    |/usuarios/admin/lista      |# Listar administradores|
+
+|Animales|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/animales/                | # Listar animales|
+|GET   |/animales/{id}             |# Obtener animal por ID|
+|POST   |/animales/                | # Crear animal|
+|PUT    |/animales/{id}            | # Actualizar animal|
+|DELETE |/animales/{id}            | # Eliminar animal|
+|GET    |/animales/propietario/{id}| # Animales por propietario|
+
+|Servicios|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/servicios/               | # Listar servicios|
+|GET    |/servicios/{id}           | # Obtener servicio por ID|
+|POST   |/servicios/              |  # Crear servicio|
+|PUT    |/servicios/{id}          |  # Actualizar servicio|
+|DELETE |/servicios/{id}          |  # Eliminar servicio|
+
+|Citas|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/citas/                  |  # Listar citas|
+|GET   | /citas/{id}              |  # Obtener cita por ID|
+|POST  | /citas/                   |# Crear cita|
+|PUT   | /citas/{id}               |# Actualizar cita|
+|DELETE| /citas/{id}                |# Eliminar cita|
+|GET   | /citas/animal/{id}        | # Citas por animal|
+|GET   | /citas/pendientes         | # Citas pendientes|
+
+|Facturas|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET   | /facturas/                | # Listar facturas|
+|GET    |/facturas/{id}            | # Obtener factura por ID|
+|POST  | /facturas/                | # Crear factura|
+|PUT   | /facturas/{id}            | # Actualizar factura|
+|DELETE | /facturas/{id}           |  # Eliminar factura|
+|PATCH | /facturas/{id}/pagar      | # Marcar como pagada|
+|GET   | /facturas/pendientes      | # Facturas pendientes|
+
+|Tipos de Animales|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/tipoanimal/              |# Listar tipos|
+|GET    |/tipoanimal/{id}         | # Obtener tipo por ID|
+|POST  | /tipoanimal/             |  # Crear tipo|
+|PUT    |/tipoanimal/{id}         |  # Actualizar tipo|
+|DELETE | /tipoanimal/{id}         |  # Eliminar tipo|
+
+|Razas|link                |funcionalidad|
+|-------------|-------------------|-------------|
+|GET    |/razas/                  |  # Listar razas|
+|GET    |/razas/{id}              |  # Obtener raza por ID|
+|GET    |/razas/tipo/{tipo_id}    | # Razas por tipo|
+|POST   |/razas/                  |  # Crear raza|
+|PUT    |/razas/{id}              |  # Actualizar raza|
+|DELETE |/razas/{id}              |  # Eliminar raza|
+
+🖥️ Menú de Consola
+El sistema incluye una interfaz de consola interactiva con las siguientes características:
+Sistema de Login
+
+Autenticación con email y contraseña
+3 intentos antes de bloquear acceso
+Contraseña oculta durante escritura
+
+Menús Disponibles
+
+Gestión de Usuarios - CRUD completo
+Gestión de Animales - Registro y seguimiento
+Gestión de Citas - Programación de servicios
+Gestión de Facturas - Control de pagos
+Información del Sistema - Estadísticas
+
+Características
+
+✅ Interfaz amigable con emojis
+✅ Validación de UUIDs
+✅ Confirmación para acciones críticas
+✅ Manejo robusto de errores
+✅ Navegación intuitiva
+
 
 ## 📞 Soporte
 
@@ -247,34 +427,15 @@ Para reportar errores o solicitar nuevas características:
 3. Incluir pasos para reproducir el problema
 4. Especificar sistema operativo y versión de Python
 
-## 👥 Contribuidores
-
-- **Equipo ITM**: Desarrollo principal del sistema
-- **Veterinaria El Zancudo**: Especificaciones y pruebas
-
 ## 📄 Licencia
 
 Este proyecto es desarrollado para uso interno de la Veterinaria El Zancudo.
 
 ## 🔄 Versiones
 
-### v1.0.0 (Actual)
-- ✅ Sistema de login con validación
-- ✅ Menú principal con navegación
-- ✅ Gestión básica de usuarios
-- ✅ Interfaz de línea de comandos mejorada
-- ✅ Conexión a base de datos PostgreSQL
-- ✅ Sistema de roles y permisos
 
-### Próximas Versiones
-- 🔲 Reportes avanzados
-- 🔲 Backup automático de datos
-- 🔲 Interfaz web (opcional)
-- 🔲 Notificaciones por email
-- 🔲 Integración con sistemas de pago
 
 ---
 
-**🏥 Sistema de Gestión Veterinaria El Zancudo - v1.0.0**
+**🏥 Sistema de Gestión Veterinaria El Zancudo - v1.1.0**
 
-*Desarrollado con ❤️ por el Equipo ITM*
