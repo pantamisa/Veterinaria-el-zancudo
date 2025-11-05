@@ -10,7 +10,13 @@ from sqlalchemy.orm import Session
 
 from Database.config import SessionLocal
 from Entities.animal import Animal
-from Schemas import AnimalCreate, AnimalUpdate, AnimalResponse, RespuestaAPI
+from Schemas import (
+    AnimalCreate,
+    AnimalUpdate,
+    AnimalResponse,
+    RespuestaAPI,
+    AnimalUpdateResponse,
+)
 from Crud.Animal_crud import AnimalCRUD
 
 router = APIRouter(prefix="/animales", tags=["Animales"])
@@ -119,7 +125,7 @@ async def crear_animal(animal_in: AnimalCreate, db: Session = Depends(get_db)):
 # ==================== ENDPOINTS PUT ====================
 
 
-@router.put("/{animal_id}", response_model=AnimalResponse)
+@router.put("/{animal_id}", response_model=AnimalUpdateResponse)
 async def actualizar_animal(
     animal_id: UUID,
     animal_in: AnimalUpdate,
@@ -141,7 +147,7 @@ async def actualizar_animal(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Animal no encontrado"
             )
-        return animal_actualizado
+        return {"exito": True, "data": animal_actualizado}
     except HTTPException:
         raise
     except Exception as e:
