@@ -157,6 +157,9 @@ class AnimalResponse(AnimalBase):
     class Config:
         from_attributes = True
 
+class AnimalUpdateResponse(BaseModel):
+    exito: bool
+    data: Optional[AnimalResponse] = None
 
 class AnimalConRelaciones(AnimalResponse):
     genero: GeneroResponse
