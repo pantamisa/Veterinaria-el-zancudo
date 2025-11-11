@@ -48,3 +48,4 @@ class Factura(Base):
             "costo": float(self.costo) if self.costo is not None else None,
             "id_usuario_pago": str(self.id_usuario_pago),
         }
+    

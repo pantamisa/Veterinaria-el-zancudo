@@ -288,3 +288,24 @@ class RespuestaLista(BaseModel):
     exito: bool = True
     total: int
     datos: List[dict]
+
+
+class ServicioConUsoResponse(BaseModel):
+    """Schema para servicio con cantidad de usos"""
+    id_servicio: str
+    nombre_servicio: str
+    costo: float
+    total_citas: int
+
+    class Config:
+        from_attributes = True
+
+class ServicioConUsoResponseRaza(BaseModel):
+    """Schema para servicio con cantidad de usos"""
+    id_raza: str
+    nombre_raza: str
+    tipo_animal: str
+    total_animales: int
+    
+    class Config:
+        from_attributes = True

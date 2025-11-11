@@ -21,14 +21,16 @@ from Crud.Servicio_crud import (
     obtener_servicio,
     actualizar_servicio,
     eliminar_servicio,
-    obtener_costo_servicio
+    obtener_costo_servicio,
+    obtener_servicios_con_uso
 )
 
 from Schemas import (
     ServicioCreate,
     ServicioUpdate,
     ServicioResponse,
-    RespuestaAPI
+    RespuestaAPI,
+    ServicioConUsoResponse
 )
 
 router = APIRouter(prefix="/servicios", tags=["Servicios"])
@@ -41,6 +43,20 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@router.get("/estadisticas/uso", response_model=List[ServicioConUsoResponse])
+async def obtener_todos_servicios_con_uso(db: Session = Depends(get_db)):
+
+    try:
+        servicios = obtener_servicios_con_uso(db)
+        return servicios
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener servicios con uso: {str(e)}"
+        )
+
 
 
 @router.get("/", response_model=List[ServicioResponse])
