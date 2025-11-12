@@ -15,7 +15,8 @@ from Crud.Usuario_crud import (
     get_usuario,
     update_usuario,
     delete_usuario,
-    login_usuario
+    login_usuario,
+    contar_usuarios
 )
 from Entities.usuario import Usuario
 
@@ -41,6 +42,18 @@ def get_db():
 
 # ==================== ENDPOINTS GET ====================
 
+
+@router.get("/total")
+def obtener_total_usuarios(db: Session = Depends(get_db)):
+    try:
+        total = contar_usuarios(db)
+        return {"total_usuarios": total}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al contar usuarios: {str(e)}"
+        )
+    
 @router.get("/", response_model=List[UsuarioResponse])
 async def obtener_usuarios(
     skip: int = 0,

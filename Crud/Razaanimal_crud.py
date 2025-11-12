@@ -1,6 +1,9 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from Entities.Raza_animal import Raza_animal
+from Entities.animal import Animal
+from Entities.Tipo_animal import Tipo_animal
 import uuid
 
 class RazaAnimalCRUD:
@@ -63,3 +66,39 @@ class RazaAnimalCRUD:
             self.db.commit()
             return True
         return False
+
+    def obtener_razas_mas_populares(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Obtiene las razas más populares (con más animales registrados).
+        
+        Args:
+            limit: Cantidad máxima de resultados (default: 10)
+        """
+        resultados = self.db.query(
+            Raza_animal.id_raza,
+            Raza_animal.nombreRaza,
+            Tipo_animal.nombre.label('tipo_animal'),
+            func.count(Animal.id_animal).label('total_animales')
+        ).join(
+            Animal, Raza_animal.id_raza == Animal.id_raza
+        ).join(
+            Tipo_animal, Raza_animal.id_tipoAnimal == Tipo_animal.id_tipoAnimal
+        ).group_by(
+            Raza_animal.id_raza,
+            Raza_animal.nombreRaza,
+            Tipo_animal.nombre
+        ).order_by(
+            func.count(Animal.id_animal).desc()
+        ).limit(limit).all()
+
+        razas_populares = [
+            {
+                "id_raza": str(row.id_raza),
+                "nombre_raza": row.nombreRaza,
+                "tipo_animal": row.tipo_animal,
+                "total_animales": row.total_animales
+            }
+            for row in resultados
+        ]
+
+        return razas_populares
