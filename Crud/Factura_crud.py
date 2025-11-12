@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from Entities.Factura import Factura  # importa tu modelo Factura
 from sqlalchemy import func
-
+from Schemas import FacturaUpdate # Importar el schema para el tipado
 # ========== CREAR ==========
 def crear_factura(db: Session, id_cita, costo, id_usuario_pago):
     """Crea una nueva factura (por defecto no pagada)."""
@@ -38,12 +38,18 @@ def marcar_factura_pagada(db: Session, id_factura):
         db.refresh(factura)
     return factura
 
-# ========== ACTUALIZAR COSTO ==========
-def actualizar_costo_factura(db: Session, id_factura, nuevo_costo):
-    """Actualiza el costo de la factura."""
+# ========== ACTUALIZAR FACTURA (GENERAL) ==========
+def actualizar_factura(db: Session, id_factura: str, payload: FacturaUpdate):
+    """Actualiza una factura existente con los datos proporcionados."""
     factura = db.query(Factura).filter(Factura.id_factura == id_factura).first()
     if factura:
-        factura.costo = nuevo_costo
+        # Obtener los datos del payload que no son None
+        update_data = payload.dict(exclude_unset=True)
+        
+        # Actualizar los campos de la factura
+        for key, value in update_data.items():
+            setattr(factura, key, value)
+            
         db.commit()
         db.refresh(factura)
     return factura

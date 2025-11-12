@@ -13,7 +13,7 @@ from Crud.Factura_crud import (
     obtener_facturas,
     obtener_factura,
     marcar_factura_pagada,
-    actualizar_costo_factura,
+    actualizar_factura,
     eliminar_factura,
     sumar_costos
 )
@@ -103,19 +103,23 @@ async def pagar_factura(id_factura: UUID, db: Session = Depends(get_db)):
                             detail=f"Error al marcar factura como pagada: {str(e)}")
 
 
-@router.patch("/{id_factura}/costo", response_model=FacturaResponse)
-async def actualizar_costo(id_factura: UUID, nuevo_costo: float, db: Session = Depends(get_db)):
-    """Actualizar el costo de una factura"""
+@router.put("/{id_factura}", response_model=FacturaResponse, summary="Actualizar una factura")
+async def actualizar_factura_endpoint(
+    id_factura: UUID,
+    payload: FacturaUpdate,
+    id_usuario_edita: UUID, # Se recibe como query param desde el frontend
+    db: Session = Depends(get_db)
+):
+    """Actualizar una factura existente por su ID."""
     try:
-        factura = actualizar_costo_factura(db, id_factura, nuevo_costo)
-        if not factura:
+        factura_actualizada = actualizar_factura(db, id_factura, payload)
+        if not factura_actualizada:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Factura no encontrada")
-        return factura
+        return factura_actualizada
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error al actualizar costo de factura: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error al actualizar la factura: {str(e)}")
 
 
 @router.delete("/{id_factura}", response_model=RespuestaAPI)
