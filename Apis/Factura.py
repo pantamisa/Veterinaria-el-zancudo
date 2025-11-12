@@ -14,7 +14,8 @@ from Crud.Factura_crud import (
     obtener_factura,
     marcar_factura_pagada,
     actualizar_costo_factura,
-    eliminar_factura
+    eliminar_factura,
+    sumar_costos
 )
 
 from Schemas import (
@@ -34,6 +35,20 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@router.get("/total-costos")
+async def obtener_total_costos(db: Session = Depends(get_db)):
+    """
+    Retorna la suma total de los costos de todas las facturas.
+    """
+    try:
+        total = sumar_costos(db)
+        return {"total_costos": total}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al calcular total de costos: {str(e)}"
+        )
 
 
 @router.get("/", response_model=List[FacturaResponse])

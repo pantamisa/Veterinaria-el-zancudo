@@ -12,6 +12,7 @@ from Schemas import (
     RazaAnimalUpdate,
     RazaAnimalResponse,
     RazaAnimalConTipo,
+    ServicioConUsoResponseRaza,
     RespuestaAPI
 )
 
@@ -415,11 +416,22 @@ async def obtener_estadisticas_raza(
                 "tipo_animal": tipo_animal_nombre
             }
         )
-
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al obtener estadísticas: {str(e)}"
+        )
+    
+@router.get("/estadisticas/uso", response_model=List[ServicioConUsoResponseRaza])
+async def obtener_todos_servicios_con_uso(db: Session = Depends(get_db)):
+    try:
+        crud = RazaAnimalCRUD(db)  # ✅ Crear instancia
+        servicios = crud.obtener_razas_mas_populares()  # ✅ Llamar desde instancia
+        return servicios
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener servicios con uso: {str(e)}"
         )

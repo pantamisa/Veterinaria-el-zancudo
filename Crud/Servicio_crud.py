@@ -1,5 +1,9 @@
 from sqlalchemy.orm import Session
 from Entities.Servicios import Servicios  # Ajusta la ruta al modelo correcto
+from Entities.Servicios import Servicios
+from Entities.Citas import Citas
+from typing import List, Dict, Any
+from sqlalchemy import func
 
 # ========== CREAR ==========
 def crear_servicio(db: Session, nombre_ser: str, costo: float):
@@ -51,3 +55,33 @@ def obtener_costo_servicio(db: Session, id_servicio):
     """Devuelve solo el costo del servicio por id."""
     servicio = db.query(Servicios.costo).filter(Servicios.id_servicio == id_servicio).first()
     return servicio[0] if servicio else None
+
+
+def obtener_servicios_con_uso(db: Session) -> List[Dict[str, Any]]:
+
+    resultados = db.query(
+        Servicios.id_servicio,
+        Servicios.nombre_ser,
+        Servicios.costo,
+        func.count(Citas.id_citas).label('total_citas')
+    ).outerjoin(
+        Citas, Servicios.id_servicio == Citas.id_servicio
+    ).group_by(
+        Servicios.id_servicio,
+        Servicios.nombre_ser,
+        Servicios.costo
+    ).all()
+    
+    # Convertir a lista de diccionarios
+    servicios_con_uso = [
+        {
+            "id_servicio": str(row.id_servicio),
+            "nombre_servicio": row.nombre_ser,
+            "costo": float(row.costo),
+            "total_citas": row.total_citas
+        }
+        for row in resultados
+    ]
+    
+    return servicios_con_uso
+

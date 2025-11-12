@@ -104,3 +104,11 @@ def login_usuario(db: Session, email: str, password: str) -> Usuario | None:
     if not verify_password(password, usuario.contraseña_hash):
         return None
     return usuario
+
+def contar_usuarios(db: Session) -> int:
+    """
+    Devuelve la cantidad total de usuarios registrados en la base de datos.
+    """
+    from Entities.usuario import Usuario
+    total = db.query(Usuario).count()
+    return total
