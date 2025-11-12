@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
 from Entities.Factura import Factura  # importa tu modelo Factura
+from sqlalchemy import func
 
 # ========== CREAR ==========
 def crear_factura(db: Session, id_cita, costo, id_usuario_pago):
@@ -55,3 +56,11 @@ def eliminar_factura(db: Session, id_factura):
         db.delete(factura)
         db.commit()
     return factura
+
+
+def sumar_costos(db: Session) -> float:
+    """
+    Devuelve la suma total de los costos de todas las facturas.
+    """
+    total = db.query(func.sum(Factura.costo)).scalar()  # ✅ Suma de todos los costos
+    return float(total or 0)  
